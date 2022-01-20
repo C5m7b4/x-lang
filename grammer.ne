@@ -4,6 +4,17 @@ const lexer = require('./lexer')
 
 @lexer lexer
 
+program
+  -> statements
+  {%
+    (data) => {
+      return {
+        type: "program",
+        body: data[0]
+      }
+    }
+  %}
+
 statements
   -> null
   {%

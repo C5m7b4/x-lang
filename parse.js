@@ -21,7 +21,8 @@ async function main() {
   } else {
     const astFilename = path.basename(filename) + '.ast';
     const ast = parser.results[0];
-    await fs.writeFile(astFilename, JSON.stringify(ast, null, ' '));
+    const astFullPath = 'asts/' + astFilename;
+    await fs.writeFile(astFullPath, JSON.stringify(ast, null, ' '));
     console.log(`Wrote ${astFilename}`);
   }
 }

@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const lexer = require('./lexer');
 
 async function main() {
-  const code = (await fs.readFile('example1.x')).toString();
+  const code = (await fs.readFile('src/example1.x')).toString();
   lexer.reset(code);
   let token;
   while (true) {
