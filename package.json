@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gen-parser":"nearleyc grammer.ne -o grammer.js"
+    "gen-parser": "nearleyc grammer.ne -o grammer.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.0.0",
     "moo": "^0.5.1",
     "nearley": "^2.20.1"
   }
