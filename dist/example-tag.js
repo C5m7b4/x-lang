@@ -2,6 +2,13 @@ let a_array = [1, 2, 3];
 let a_set = new Set([2, 4, 5]);
 print(a_set);
 let e_array = [1, 2, 3, 4];
+let a_dict = new Map([[1, 2], [3, 4]]);
+let b_dict = new Map([[1, 2], [3, 4]]);
+let c_dict = new Map([["name", "Maria"], ["age", 10]]);
+print(c_dict);
+let empty_array = [];
+let empty_set = new Set([]);
+let empty_dict = new Map([]);
 
 
   /*
