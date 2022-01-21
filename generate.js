@@ -127,6 +127,16 @@ function generate(node) {
     case 'set_literal':
       const setItems = node.items.map(generate).join(', ');
       return `new Set([${setItems}])`;
+    case 'dict_literal':
+      const entries = node.entries
+        .map((entry) => {
+          const [key, value] = entry;
+          const keyExpr = generate(key);
+          const valueExpr = generate(value);
+          return `[${keyExpr}, ${valueExpr}]`;
+        })
+        .join(', ');
+      return `new Map([${entries}])`;
     default:
       throw new Error(`unknown node type: ${node.type}`);
       break;
