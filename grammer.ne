@@ -62,7 +62,7 @@ function_call -> %identifier _ "(" _ expression_list _ ")"
 # doIt(a b c)[
 # ...  
 #]
-function_definition -> %identifier _ "(" _ expression_list _ ")" _ code_block
+function_definition -> %identifier _ "(" _ expression_list _ ")" _ code_block_wo_parameters
 {%
   (data) => {
     return {
@@ -75,15 +75,7 @@ function_definition -> %identifier _ "(" _ expression_list _ ")" _ code_block
 %}
 
 code_block 
-  -> %left_bracket _ %nl statements %nl _ %right_bracket
-    {%
-      (data) => {
-        return {
-          type: 'code_block',
-          statements: data[3]
-        }
-      }
-    %}
+  -> code_block_wo_parameters
   | %left_bracket _ code_block_parameters _ %nl statements %nl _ %right_bracket
     {%
       (data) => {
@@ -91,6 +83,17 @@ code_block
           type: 'code_block',
           parameters: data[2],
           statements: data[5]
+        }
+      }
+    %}
+
+code_block_wo_parameters
+  -> %left_bracket _ %nl statements %nl _ %right_bracket
+    {%
+      (data) => {
+        return {
+          type: 'code_block',
+          statements: data[3]
         }
       }
     %}

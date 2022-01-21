@@ -47,7 +47,7 @@ var grammar = {
           }
         }
           },
-    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}, "_", "code_block"], "postprocess": 
+    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}, "_", "code_block_wo_parameters"], "postprocess": 
         (data) => {
           return {
             type: 'function-definition',
@@ -57,20 +57,21 @@ var grammar = {
           }
         }
         },
-    {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
-        (data) => {
-          return {
-            type: 'code_block',
-            statements: data[3]
-          }
-        }
-            },
+    {"name": "code_block", "symbols": ["code_block_wo_parameters"]},
     {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", "code_block_parameters", "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
         (data) => {
           return {
             type: 'code_block',
             parameters: data[2],
             statements: data[5]
+          }
+        }
+            },
+    {"name": "code_block_wo_parameters", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
+        (data) => {
+          return {
+            type: 'code_block',
+            statements: data[3]
           }
         }
             },
