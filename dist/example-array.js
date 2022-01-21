@@ -1,5 +1,15 @@
 let arr = [1, 2, [3, 4, 5], "hello", "world"];
 print(arr);
+each(arr, function(item) {
+	print(item);
+	
+});
+let squared = map(arr, function(item) {
+	let a = mul(item, item);
+	add(a, 3);
+	
+});
+print(squared);
 
 
   /*
@@ -47,9 +57,25 @@ print(arr);
 
   function $if(cond, consequent, alternate){
     if ( cond){
-      consequent();
+      return consequent();
     } else {
-      alternate();
+      return alternate();
     }
+  }
+
+  function map(arr, fun){
+    return arr.map(fun);
+  }
+
+  function filter(arr, fun){
+    return arr.filter(fun);
+  }
+
+  function reduce(arr, fun, initValue){
+    return arr.reduce(fun, initValue);
+  }
+
+  function each(arr, fun){
+    return arr.forEach(fun);
   }
 

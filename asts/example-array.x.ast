@@ -19,19 +19,19 @@
       "type": "number",
       "value": 1,
       "text": "1",
-      "offset": 7,
+      "offset": 8,
       "lineBreaks": 0,
       "line": 1,
-      "col": 8
+      "col": 9
      },
      {
       "type": "number",
       "value": 2,
       "text": "2",
-      "offset": 9,
+      "offset": 10,
       "lineBreaks": 0,
       "line": 1,
-      "col": 10
+      "col": 11
      },
      {
       "type": "array_literal",
@@ -40,28 +40,28 @@
         "type": "number",
         "value": 3,
         "text": "3",
-        "offset": 13,
+        "offset": 14,
         "lineBreaks": 0,
         "line": 1,
-        "col": 14
+        "col": 15
        },
        {
         "type": "number",
         "value": 4,
         "text": "4",
-        "offset": 15,
+        "offset": 16,
         "lineBreaks": 0,
         "line": 1,
-        "col": 16
+        "col": 17
        },
        {
         "type": "number",
         "value": 5,
         "text": "5",
-        "offset": 17,
+        "offset": 18,
         "lineBreaks": 0,
         "line": 1,
-        "col": 18
+        "col": 19
        }
       ]
      },
@@ -69,19 +69,19 @@
       "type": "string",
       "value": "\"hello\"",
       "text": "\"hello\"",
-      "offset": 21,
+      "offset": 22,
       "lineBreaks": 0,
       "line": 1,
-      "col": 22
+      "col": 23
      },
      {
       "type": "string",
       "value": "\"world\"",
       "text": "\"world\"",
-      "offset": 29,
+      "offset": 30,
       "lineBreaks": 0,
       "line": 1,
-      "col": 30
+      "col": 31
      }
     ]
    }
@@ -92,7 +92,7 @@
     "type": "identifier",
     "value": "print",
     "text": "print",
-    "offset": 39,
+    "offset": 41,
     "lineBreaks": 0,
     "line": 2,
     "col": 1
@@ -102,9 +102,221 @@
      "type": "identifier",
      "value": "arr",
      "text": "arr",
-     "offset": 45,
+     "offset": 47,
      "lineBreaks": 0,
      "line": 2,
+     "col": 7
+    }
+   ]
+  },
+  {
+   "type": "function_call",
+   "fun_name": {
+    "type": "identifier",
+    "value": "each",
+    "text": "each",
+    "offset": 53,
+    "lineBreaks": 0,
+    "line": 3,
+    "col": 1
+   },
+   "parameters": [
+    {
+     "type": "identifier",
+     "value": "arr",
+     "text": "arr",
+     "offset": 58,
+     "lineBreaks": 0,
+     "line": 3,
+     "col": 6
+    },
+    {
+     "type": "code_block",
+     "parameters": [
+      {
+       "type": "identifier",
+       "value": "item",
+       "text": "item",
+       "offset": 65,
+       "lineBreaks": 0,
+       "line": 3,
+       "col": 13
+      }
+     ],
+     "statements": [
+      {
+       "type": "function_call",
+       "fun_name": {
+        "type": "identifier",
+        "value": "print",
+        "text": "print",
+        "offset": 74,
+        "lineBreaks": 0,
+        "line": 4,
+        "col": 3
+       },
+       "parameters": [
+        {
+         "type": "identifier",
+         "value": "item",
+         "text": "item",
+         "offset": 80,
+         "lineBreaks": 0,
+         "line": 4,
+         "col": 9
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "assignment",
+   "var_name": {
+    "type": "identifier",
+    "value": "squared",
+    "text": "squared",
+    "offset": 91,
+    "lineBreaks": 0,
+    "line": 6,
+    "col": 1
+   },
+   "value": {
+    "type": "function_call",
+    "fun_name": {
+     "type": "identifier",
+     "value": "map",
+     "text": "map",
+     "offset": 101,
+     "lineBreaks": 0,
+     "line": 6,
+     "col": 11
+    },
+    "parameters": [
+     {
+      "type": "identifier",
+      "value": "arr",
+      "text": "arr",
+      "offset": 105,
+      "lineBreaks": 0,
+      "line": 6,
+      "col": 15
+     },
+     {
+      "type": "code_block",
+      "parameters": [
+       {
+        "type": "identifier",
+        "value": "item",
+        "text": "item",
+        "offset": 112,
+        "lineBreaks": 0,
+        "line": 6,
+        "col": 22
+       }
+      ],
+      "statements": [
+       {
+        "type": "assignment",
+        "var_name": {
+         "type": "identifier",
+         "value": "a",
+         "text": "a",
+         "offset": 121,
+         "lineBreaks": 0,
+         "line": 7,
+         "col": 3
+        },
+        "value": {
+         "type": "function_call",
+         "fun_name": {
+          "type": "identifier",
+          "value": "mul",
+          "text": "mul",
+          "offset": 125,
+          "lineBreaks": 0,
+          "line": 7,
+          "col": 7
+         },
+         "parameters": [
+          {
+           "type": "identifier",
+           "value": "item",
+           "text": "item",
+           "offset": 129,
+           "lineBreaks": 0,
+           "line": 7,
+           "col": 11
+          },
+          {
+           "type": "identifier",
+           "value": "item",
+           "text": "item",
+           "offset": 134,
+           "lineBreaks": 0,
+           "line": 7,
+           "col": 16
+          }
+         ]
+        }
+       },
+       {
+        "type": "function_call",
+        "fun_name": {
+         "type": "identifier",
+         "value": "add",
+         "text": "add",
+         "offset": 143,
+         "lineBreaks": 0,
+         "line": 8,
+         "col": 3
+        },
+        "parameters": [
+         {
+          "type": "identifier",
+          "value": "a",
+          "text": "a",
+          "offset": 147,
+          "lineBreaks": 0,
+          "line": 8,
+          "col": 7
+         },
+         {
+          "type": "number",
+          "value": 3,
+          "text": "3",
+          "offset": 149,
+          "lineBreaks": 0,
+          "line": 8,
+          "col": 9
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "type": "function_call",
+   "fun_name": {
+    "type": "identifier",
+    "value": "print",
+    "text": "print",
+    "offset": 157,
+    "lineBreaks": 0,
+    "line": 10,
+    "col": 1
+   },
+   "parameters": [
+    {
+     "type": "identifier",
+     "value": "squared",
+     "text": "squared",
+     "offset": 163,
+     "lineBreaks": 0,
+     "line": 10,
      "col": 7
     }
    ]
