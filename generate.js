@@ -41,6 +41,34 @@ const runtime = `
     return Math.sqrt(x);
   }
 
+  function gt(x, y){
+    return x > y;
+  }
+
+  function $if(cond, consequent, alternate){
+    if ( cond){
+      return consequent();
+    } else {
+      return alternate();
+    }
+  }
+
+  function map(arr, fun){
+    return arr.map(fun);
+  }
+
+  function filter(arr, fun){
+    return arr.filter(fun);
+  }
+
+  function reduce(arr, fun, initValue){
+    return arr.reduce(fun, initValue);
+  }
+
+  function each(arr, fun){
+    return arr.forEach(fun);
+  }
+
 `;
 
 async function main() {
@@ -68,7 +96,9 @@ function generate(node) {
       const value = generate(node.value);
       return `let ${varName} = ${value}`;
     case 'function_call':
-      const functionName = node.fun_name.value;
+      const sourceFunctionName = node.fun_name.value;
+      const functionName =
+        sourceFunctionName === 'if' ? '$if' : sourceFunctionName;
       const params = node.parameters.map(generate).join(', ');
       return `${functionName}(${params})`;
     case 'identifier':
@@ -80,12 +110,23 @@ function generate(node) {
     case 'function-definition':
       const funName = node.fun_name.value;
       const functionParams = node.parameters.map(generate).join(', ');
-      const body = node.body.map(generate).join(';\n') + ';\n';
+      const body = node.body.statements.map(generate).join(';\n') + ';\n';
       const indented = body
         .split('\n')
         .map((line) => '\t' + line)
         .join('\n');
       return `function ${funName} (${functionParams}){\n${indented}\n}`;
+    case 'code_block':
+      const codeBlockBody = node.statements.map(generate).join(';\n') + ';\n';
+      const codeBlockParams = node.parameters.map(generate).join(', ');
+      const indentedCodeBlockBody = codeBlockBody
+        .split('\n')
+        .map((line) => '\t' + line)
+        .join('\n');
+      return `function(${codeBlockParams}) {\n${indentedCodeBlockBody}\n}`;
+    case 'array_literal':
+      const items = node.items.map(generate).join(', ');
+      return `[${items}]`;
     default:
       throw new Error(`unknown node type: ${node.type}`);
       break;

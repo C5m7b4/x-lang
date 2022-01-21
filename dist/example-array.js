@@ -1,18 +1,15 @@
-function main (){
-	let x = add(1, 2, 3, 4, 5, 6, 7, 8, 9);
-	let y = mul(1, 2, 3, 4, 5, 6, 7, 8, 9);
-	print("sum is", x);
-	print("product is ", y);
-	$if(gt(x, y), function() {
-		print("sum is greater than product");
-		
-	}, function() {
-		print("product is greater than sum");
-		
-	});
+let arr = [1, 2, [3, 4, 5], "hello", "world"];
+print(arr);
+each(arr, function(item) {
+	print(item);
 	
-};
-main();
+});
+let squared = map(arr, function(item) {
+	let a = mul(item, item);
+	add(a, 3);
+	
+});
+print(squared);
 
 
   /*
@@ -60,9 +57,25 @@ main();
 
   function $if(cond, consequent, alternate){
     if ( cond){
-      consequent();
+      return consequent();
     } else {
-      alternate();
+      return alternate();
     }
+  }
+
+  function map(arr, fun){
+    return arr.map(fun);
+  }
+
+  function filter(arr, fun){
+    return arr.filter(fun);
+  }
+
+  function reduce(arr, fun, initValue){
+    return arr.reduce(fun, initValue);
+  }
+
+  function each(arr, fun){
+    return arr.forEach(fun);
   }
 
