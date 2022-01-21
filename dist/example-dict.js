@@ -1,14 +1,21 @@
-let a_array = [1, 2, 3];
-let a_set = new Set([2, 4, 5]);
-print(a_set);
-let e_array = [1, 2, 3, 4];
-let a_dict = new Map([[1, 2], [3, 4]]);
+let a_dict = new Map([["1", 2], ["3", 4]]);
 let b_dict = new Map([[1, 2], [3, 4]]);
-let c_dict = new Map([["name", "Maria"], ["age", 10]]);
-print(c_dict);
-let empty_array = [];
-let empty_set = new Set([]);
+print(a_dict);
+print(b_dict);
 let empty_dict = new Map([]);
+print("empty dict", empty_dict);
+set(a_dict, "foo", "bar");
+print(get(a_dict, "foo"));
+print(a_dict);
+print("the dict has", size(a_dict), "entries in it");
+set(a_dict, "more", "less");
+print("the dict has", size(a_dict), "entries in it");
+each(entries(a_dict), function (entry) {
+let key = at(entry, 0);
+let value = at(entry, 1);
+	return print(key, ":", value);
+
+});
 
 /*
   runtime functions
@@ -57,6 +64,14 @@ function eq(one, other) {
   return one === other;
 }
 
+function split(str, separator) {
+  return str.split(separator);
+}
+
+function at(arr, index) {
+  return arr[index];
+}
+
 function $if(cond, consequent, alternate) {
   if (cond) {
     return consequent();
@@ -79,4 +94,24 @@ function reduce(arr, fun, initValue) {
 
 function each(arr, fun) {
   return arr.forEach(fun);
+}
+
+function entries(map) {
+  return Array.from(map.entries());
+}
+
+function get(map, key) {
+  return map.get(key);
+}
+
+function set(map, key, value) {
+  map.set(key, value);
+}
+
+function size(setOrMap) {
+  return setOrMap.size;
+}
+
+function length(arr) {
+  return arr.length;
 }
