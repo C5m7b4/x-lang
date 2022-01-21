@@ -47,7 +47,7 @@ var grammar = {
           }
         }
           },
-    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}, "_", "code_block"], "postprocess": 
+    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}, "_", "code_block_wo_parameters"], "postprocess": 
         (data) => {
           return {
             type: 'function-definition',
@@ -57,20 +57,21 @@ var grammar = {
           }
         }
         },
-    {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
-        (data) => {
-          return {
-            type: 'code_block',
-            statements: data[3]
-          }
-        }
-            },
+    {"name": "code_block", "symbols": ["code_block_wo_parameters"]},
     {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", "code_block_parameters", "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
         (data) => {
           return {
             type: 'code_block',
             parameters: data[2],
             statements: data[5]
+          }
+        }
+            },
+    {"name": "code_block_wo_parameters", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
+        (data) => {
+          return {
+            type: 'code_block',
+            statements: data[3]
           }
         }
             },
@@ -93,25 +94,41 @@ var grammar = {
     {"name": "expression", "symbols": ["literal"], "postprocess": id},
     {"name": "expression", "symbols": ["function_call"], "postprocess": id},
     {"name": "expression", "symbols": ["code_block"], "postprocess": id},
-    {"name": "expression", "symbols": ["array_literal"], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("number") ? {type: "number"} : number)], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("string") ? {type: "string"} : string)], "postprocess": id},
-    {"name": "array_literal", "symbols": [{"literal":"{"}, "_", "expression_list", "_", {"literal":"}"}], "postprocess": 
+    {"name": "literal", "symbols": ["sequence_literal"], "postprocess": id},
+    {"name": "sequence_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", "expression_list", "_", {"literal":"}"}], "postprocess": 
         (data) => {
+          const tagName = data[0] || 'array';
+          if ( tagName === 'dict'){
+            throw new error('You tagged a sequence as a dict')
+          }
           return {
-            type: 'array_literal',
-            items: data[2]
+            type: tagName + '_literal',
+            items: data[3]
           }
         }
             },
-    {"name": "array_literal", "symbols": [{"literal":"{"}, "_", {"literal":"}"}], "postprocess": 
+    {"name": "sequence_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", {"literal":"}"}], "postprocess": 
         (data) => {
+          const tagName = data[0] || 'array';
+           if ( tagName === 'dict'){
+            throw new error('You tagged a sequence as a dict')
+          }
           return {
-            type: 'array_literal',
+            type: tagName + '_literal',
             items: []
           }
         }
             },
+    {"name": "optional_tag", "symbols": [], "postprocess": () => null},
+    {"name": "optional_tag", "symbols": ["tag"], "postprocess": id},
+    {"name": "tag", "symbols": [(lexer.has("less_than") ? {type: "less_than"} : less_than), "tag_name", (lexer.has("greater_than") ? {type: "greater_than"} : greater_than)], "postprocess":  
+        (data) => data[1] 
+            },
+    {"name": "tag_name", "symbols": [{"literal":"array"}], "postprocess": id},
+    {"name": "tag_name", "symbols": [{"literal":"dict"}], "postprocess": id},
+    {"name": "tag_name", "symbols": [{"literal":"set"}], "postprocess": id},
     {"name": "_", "symbols": []},
     {"name": "_", "symbols": ["__"]},
     {"name": "__", "symbols": [(lexer.has("whitespace") ? {type: "whitespace"} : whitespace)]}

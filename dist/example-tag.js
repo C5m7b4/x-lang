@@ -1,34 +1,7 @@
-let arr = [1, 2, 3, 4, 5, 6];
-print("arr", arr);
-each(arr, function (item) {
-	return print("each", item);
-
-});
-let squared = map(arr, function (item) {
-let a = mul(item, item);
-	return add(a, 3);
-
-});
-print("squared", squared);
-let filtered = filter(arr, function (item) {
-	return eq(mod(item, 2), 0);
-
-});
-print("filtered", filtered);
-let reduced = reduce(arr, function (product, item) {
-	return mul(product, item);
-
-}, 1);
-print("reduced", reduced);
-function sqr(n) {
-	return mul(n, n);
-
-};
-function distance(x1, y1, x2, y2) {
-	return mul(sqr(sub(x1, x2)), sqr(sub(y1, y2)));
-
-};
-print("distance(3 4 8 9)", distance(3, 4, 8, 9));
+let a_array = [1, 2, 3];
+let a_set = new Set([2, 4, 5]);
+print(a_set);
+let e_array = [1, 2, 3, 4];
 
 
   /*
