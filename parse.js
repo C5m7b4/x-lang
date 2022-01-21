@@ -2,6 +2,7 @@ const nearley = require('nearley');
 const grammer = require('./grammer.js');
 const fs = require('fs').promises;
 const path = require('path');
+const util = require('util');
 
 async function main() {
   const filename = process.argv[2];
@@ -16,8 +17,11 @@ async function main() {
   parser.feed(code);
 
   if (parser.results.length > 1) {
-    console.warn('The parse tree generates multiple result');
-    console.log(parser.results);
+    console.warn('The parse tree generates multiple results');
+    console.log(util.inspect(parser.results, { depth: 10 }));
+  } else if (parser.results.length === 0) {
+    console.error('unexpected end of file');
+    process.exit(1);
   } else {
     const astFilename = path.basename(filename) + '.ast';
     const ast = parser.results[0];
