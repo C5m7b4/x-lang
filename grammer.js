@@ -64,7 +64,21 @@ var grammar = {
             statements: data[3]
           }
         }
-        },
+            },
+    {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", "code_block_parameters", "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
+        (data) => {
+          return {
+            type: 'code_block',
+            parameters: data[2],
+            statements: data[5]
+          }
+        }
+            },
+    {"name": "code_block_parameters", "symbols": [(lexer.has("bar") ? {type: "bar"} : bar), "_", "expression_list", "_", (lexer.has("bar") ? {type: "bar"} : bar)], "postprocess": 
+        (data) => {
+          return data[2]
+        }
+          },
     {"name": "expression_list", "symbols": ["expression"], "postprocess": 
         (data) => {
           return [data[0]]

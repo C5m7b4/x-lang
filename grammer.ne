@@ -74,15 +74,33 @@ function_definition -> %identifier _ "(" _ expression_list _ ")" _ code_block
   }
 %}
 
-code_block -> %left_bracket _ %nl statements %nl _ %right_bracket
-{%
-  (data) => {
-    return {
-      type: 'code_block',
-      statements: data[3]
+code_block 
+  -> %left_bracket _ %nl statements %nl _ %right_bracket
+    {%
+      (data) => {
+        return {
+          type: 'code_block',
+          statements: data[3]
+        }
+      }
+    %}
+  | %left_bracket _ code_block_parameters _ %nl statements %nl _ %right_bracket
+    {%
+      (data) => {
+        return {
+          type: 'code_block',
+          parameters: data[2],
+          statements: data[5]
+        }
+      }
+    %}
+
+code_block_parameters -> %bar _ expression_list _ %bar
+  {%
+    (data) => {
+      return data[2]
     }
-  }
-%}
+  %}
 
 expression_list  
   -> expression 
