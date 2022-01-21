@@ -1,5 +1,18 @@
-let x = mul(add(4, 5), 6);
-print(x);
+function main (){
+	let x = add(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	let y = mul(1, 2, 3, 4, 5, 6, 7, 8, 9);
+	print("sum is", x);
+	print("product is ", y);
+	$if(gt(x, y), function() {
+		print("sum is greater than product");
+		
+	}, function() {
+		print("product is greater than sum");
+		
+	});
+	
+};
+main();
 
 
   /*
@@ -39,5 +52,17 @@ print(x);
 
   function sqrt(x){
     return Math.sqrt(x);
+  }
+
+  function gt(x, y){
+    return x > y;
+  }
+
+  function $if(cond, consequent, alternate){
+    if ( cond){
+      consequent();
+    } else {
+      alternate();
+    }
   }
 
