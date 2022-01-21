@@ -47,10 +47,26 @@ const runtime = `
 
   function $if(cond, consequent, alternate){
     if ( cond){
-      consequent();
+      return consequent();
     } else {
-      alternate();
+      return alternate();
     }
+  }
+
+  function map(arr, fun){
+    return arr.map(fun);
+  }
+
+  function filter(arr, fun){
+    return arr.filter(fun);
+  }
+
+  function reduce(arr, fun, initValue){
+    return arr.reduce(fun, initValue);
+  }
+
+  function each(arr, fun){
+    return arr.forEach(fun);
   }
 
 `;
@@ -102,11 +118,12 @@ function generate(node) {
       return `function ${funName} (${functionParams}){\n${indented}\n}`;
     case 'code_block':
       const codeBlockBody = node.statements.map(generate).join(';\n') + ';\n';
+      const codeBlockParams = node.parameters.map(generate).join(', ');
       const indentedCodeBlockBody = codeBlockBody
         .split('\n')
         .map((line) => '\t' + line)
         .join('\n');
-      return `function() {\n${indentedCodeBlockBody}\n}`;
+      return `function(${codeBlockParams}) {\n${indentedCodeBlockBody}\n}`;
     case 'array_literal':
       const items = node.items.map(generate).join(', ');
       return `[${items}]`;
