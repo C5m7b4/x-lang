@@ -38,7 +38,7 @@ var grammar = {
           }
         }
           },
-    {"name": "function_call", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "parameter_list", "_", {"literal":")"}], "postprocess": 
+    {"name": "function_call", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}], "postprocess": 
         (data) => {
           return {
             type: 'function_call',
@@ -47,25 +47,30 @@ var grammar = {
           }
         }
           },
-    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "parameter_list", "_", {"literal":")"}, "_", {"literal":"["}, "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", {"literal":"]"}], "postprocess": 
+    {"name": "function_definition", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier), "_", {"literal":"("}, "_", "expression_list", "_", {"literal":")"}, "_", "code_block"], "postprocess": 
         (data) => {
           return {
             type: 'function-definition',
             fun_name: data[0],
             parameters: data[4],
-            body: data[11]
+            body: data[8]
           }
         }
         },
-    {"name": "parameter_list", "symbols": [], "postprocess": 
-        () => []
-          },
-    {"name": "parameter_list", "symbols": ["expression"], "postprocess": 
+    {"name": "code_block", "symbols": [(lexer.has("left_bracket") ? {type: "left_bracket"} : left_bracket), "_", (lexer.has("nl") ? {type: "nl"} : nl), "statements", (lexer.has("nl") ? {type: "nl"} : nl), "_", (lexer.has("right_bracket") ? {type: "right_bracket"} : right_bracket)], "postprocess": 
+        (data) => {
+          return {
+            type: 'code_block',
+            statements: data[3]
+          }
+        }
+        },
+    {"name": "expression_list", "symbols": ["expression"], "postprocess": 
         (data) => {
           return [data[0]]
         }
           },
-    {"name": "parameter_list", "symbols": ["expression", "__", "parameter_list"], "postprocess": 
+    {"name": "expression_list", "symbols": ["expression", "__", "expression_list"], "postprocess": 
         (data) => {
           return [data[0], ...data[2]]
         }
@@ -73,8 +78,26 @@ var grammar = {
     {"name": "expression", "symbols": [(lexer.has("identifier") ? {type: "identifier"} : identifier)], "postprocess": id},
     {"name": "expression", "symbols": ["literal"], "postprocess": id},
     {"name": "expression", "symbols": ["function_call"], "postprocess": id},
+    {"name": "expression", "symbols": ["code_block"], "postprocess": id},
+    {"name": "expression", "symbols": ["array_literal"], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("number") ? {type: "number"} : number)], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("string") ? {type: "string"} : string)], "postprocess": id},
+    {"name": "array_literal", "symbols": [{"literal":"{"}, "_", "expression_list", "_", {"literal":"}"}], "postprocess": 
+        (data) => {
+          return {
+            type: 'array_literal',
+            items: data[2]
+          }
+        }
+            },
+    {"name": "array_literal", "symbols": [{"literal":"{"}, "_", {"literal":"}"}], "postprocess": 
+        (data) => {
+          return {
+            type: 'array_literal',
+            items: []
+          }
+        }
+            },
     {"name": "_", "symbols": []},
     {"name": "_", "symbols": ["__"]},
     {"name": "__", "symbols": [(lexer.has("whitespace") ? {type: "whitespace"} : whitespace)]}

@@ -47,7 +47,7 @@ assignment -> %identifier _ "=" _ expression
 
 
 # doIt(a b c)
-function_call -> %identifier _ "(" _ parameter_list _ ")"
+function_call -> %identifier _ "(" _ expression_list _ ")"
   {%
     (data) => {
       return {
@@ -62,30 +62,36 @@ function_call -> %identifier _ "(" _ parameter_list _ ")"
 # doIt(a b c)[
 # ...  
 #]
-function_definition -> %identifier _ "(" _ parameter_list _ ")" _ "[" _ %nl statements %nl _ "]"
+function_definition -> %identifier _ "(" _ expression_list _ ")" _ code_block
 {%
   (data) => {
     return {
       type: 'function-definition',
       fun_name: data[0],
       parameters: data[4],
-      body: data[11]
+      body: data[8]
     }
   }
 %}
 
-parameter_list  
-  -> null
-  {%
-    () => []
-  %}
-  | expression 
+code_block -> %left_bracket _ %nl statements %nl _ %right_bracket
+{%
+  (data) => {
+    return {
+      type: 'code_block',
+      statements: data[3]
+    }
+  }
+%}
+
+expression_list  
+  -> expression 
   {%
     (data) => {
       return [data[0]]
     }
   %}
-  | expression __ parameter_list
+  | expression __ expression_list
   {%
     (data) => {
       return [data[0], ...data[2]]
@@ -96,15 +102,39 @@ expression
   -> %identifier {% id %}
   | literal {% id %}
   | function_call {% id %}
+  | code_block {% id %}
+  | array_literal {% id %}
 
 literal 
   -> 
   %number {% id %}
   | %string {% id %}
 
+# { 1 2 3 4}
+array_literal 
+  -> "{" _ expression_list _ "}"
+    {%
+      (data) => {
+        return {
+          type: 'array_literal',
+          items: data[2]
+        }
+      }
+    %}
+  | "{" _ "}"
+    {%
+      (data) => {
+        return {
+          type: 'array_literal',
+          items: []
+        }
+      }
+    %}
+
+# optional whitespace
 _ 
   -> null
   | __
 
-
-__ -> %whitespace # mandatory whitespace
+# mandatory whitespace
+__ -> %whitespace 
