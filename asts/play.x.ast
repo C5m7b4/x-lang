@@ -1,0 +1,95 @@
+{
+ "type": "program",
+ "body": [
+  {
+   "type": "assignment",
+   "var_name": {
+    "type": "identifier",
+    "value": "x",
+    "text": "x",
+    "offset": 0,
+    "lineBreaks": 0,
+    "line": 1,
+    "col": 1
+   },
+   "value": {
+    "type": "function_call",
+    "fun_name": {
+     "type": "identifier",
+     "value": "mul",
+     "text": "mul",
+     "offset": 4,
+     "lineBreaks": 0,
+     "line": 1,
+     "col": 5
+    },
+    "parameters": [
+     {
+      "type": "function_call",
+      "fun_name": {
+       "type": "identifier",
+       "value": "add",
+       "text": "add",
+       "offset": 8,
+       "lineBreaks": 0,
+       "line": 1,
+       "col": 9
+      },
+      "parameters": [
+       {
+        "type": "number",
+        "value": 4,
+        "text": "4",
+        "offset": 12,
+        "lineBreaks": 0,
+        "line": 1,
+        "col": 13
+       },
+       {
+        "type": "number",
+        "value": 5,
+        "text": "5",
+        "offset": 14,
+        "lineBreaks": 0,
+        "line": 1,
+        "col": 15
+       }
+      ]
+     },
+     {
+      "type": "number",
+      "value": 6,
+      "text": "6",
+      "offset": 17,
+      "lineBreaks": 0,
+      "line": 1,
+      "col": 18
+     }
+    ]
+   }
+  },
+  {
+   "type": "function_call",
+   "fun_name": {
+    "type": "identifier",
+    "value": "print",
+    "text": "print",
+    "offset": 21,
+    "lineBreaks": 0,
+    "line": 2,
+    "col": 1
+   },
+   "parameters": [
+    {
+     "type": "identifier",
+     "value": "x",
+     "text": "x",
+     "offset": 27,
+     "lineBreaks": 0,
+     "line": 2,
+     "col": 7
+    }
+   ]
+  }
+ ]
+}

@@ -19,6 +19,8 @@ let lexer = moo.compile({
   whitespace: /[ \t]+/,
   number: { match: /0|[1-9][0-9]*/, value: Number },
   string: /"(?:\\["\\]|[^\n"\\])*"/,
+  left_bracket: '[',
+  right_bracket: ']',
   left_paren: '(',
   right_paren: ')',
   assignment_op: '=',

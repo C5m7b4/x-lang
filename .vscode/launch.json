@@ -13,6 +13,13 @@
       ],
       "program": "${workspaceFolder}\\parse.js",
       "args":["example-assignment.x"]
+    },
+    {
+      "type":"pwa-node",
+      "request": "launch",
+      "name":"generator",
+      "program":"${workspaceFolder}\\generate.js",
+      "args":["asts/example-function-definition.x.ast"]
     }
   ]
 }

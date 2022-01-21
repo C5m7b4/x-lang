@@ -1,4 +1,4 @@
-n = 4
+n = add(4 5)
 m = 5
 o = "Hello"
 print(n m)
