@@ -45,6 +45,10 @@ const runtime = `
     return x > y;
   }
 
+  function eq(one, other){
+    return one === other;
+  }
+
   function $if(cond, consequent, alternate){
     if ( cond){
       return consequent();
@@ -68,6 +72,8 @@ const runtime = `
   function each(arr, fun){
     return arr.forEach(fun);
   }
+
+
 
 `;
 
@@ -108,22 +114,13 @@ function generate(node) {
     case 'number':
       return String(node.value);
     case 'function-definition':
-      const funName = node.fun_name.value;
-      const functionParams = node.parameters.map(generate).join(', ');
-      const body = node.body.statements.map(generate).join(';\n') + ';\n';
-      const indented = body
-        .split('\n')
-        .map((line) => '\t' + line)
-        .join('\n');
-      return `function ${funName} (${functionParams}){\n${indented}\n}`;
+      return generateFunction(
+        node.body.statements,
+        node.parameters,
+        node.fun_name.value
+      );
     case 'code_block':
-      const codeBlockBody = node.statements.map(generate).join(';\n') + ';\n';
-      const codeBlockParams = node.parameters.map(generate).join(', ');
-      const indentedCodeBlockBody = codeBlockBody
-        .split('\n')
-        .map((line) => '\t' + line)
-        .join('\n');
-      return `function(${codeBlockParams}) {\n${indentedCodeBlockBody}\n}`;
+      return generateFunction(node.statements, node.parameters);
     case 'array_literal':
       const items = node.items.map(generate).join(', ');
       return `[${items}]`;
@@ -131,6 +128,26 @@ function generate(node) {
       throw new Error(`unknown node type: ${node.type}`);
       break;
   }
+}
+
+function generateFunction(statements, parameters, name = '') {
+  const body =
+    statements
+      .map((statement, idx) => {
+        const js = generate(statement);
+        if (idx === statements.length - 1) {
+          return `\treturn ${js}`;
+        } else {
+          return js;
+        }
+      })
+      .join(';\n') + ';\n';
+  const params = parameters.map(generate).join(', ');
+  const indentedCodeBlockBody = body
+    .split('\n')
+    .map((line) => '\t' + line)
+    .join('\n');
+  return `function ${name}(${params}) {\n${body}\n}`;
 }
 
 main().catch((err) => console.log(err.stack));
