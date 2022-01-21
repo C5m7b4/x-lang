@@ -124,6 +124,9 @@ function generate(node) {
     case 'array_literal':
       const items = node.items.map(generate).join(', ');
       return `[${items}]`;
+    case 'set_literal':
+      const setItems = node.items.map(generate).join(', ');
+      return `new Set([${setItems}])`;
     default:
       throw new Error(`unknown node type: ${node.type}`);
       break;
