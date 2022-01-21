@@ -26,6 +26,8 @@ let lexer = moo.compile({
   left_brace: '{',
   right_brace: '}',
   bar: '|',
+  less_than: '<',
+  greater_than: '>',
   assignment_op: '=',
   identifier: /[a-zA-Z_][a-zA-Z0-9_]*/,
   nl: { match: /[\r\n]+/, lineBreaks: true },
