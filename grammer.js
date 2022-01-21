@@ -96,7 +96,9 @@ var grammar = {
     {"name": "expression", "symbols": ["code_block"], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("number") ? {type: "number"} : number)], "postprocess": id},
     {"name": "literal", "symbols": [(lexer.has("string") ? {type: "string"} : string)], "postprocess": id},
+    {"name": "literal", "symbols": ["empty_collection_literal"], "postprocess": id},
     {"name": "literal", "symbols": ["sequence_literal"], "postprocess": id},
+    {"name": "literal", "symbols": ["dictionary_literal"], "postprocess": id},
     {"name": "sequence_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", "expression_list", "_", {"literal":"}"}], "postprocess": 
         (data) => {
           const tagName = data[0] || 'array';
@@ -109,22 +111,53 @@ var grammar = {
           }
         }
             },
-    {"name": "sequence_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", {"literal":"}"}], "postprocess": 
+    {"name": "empty_collection_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", {"literal":"}"}], "postprocess": 
         (data) => {
           const tagName = data[0] || 'array';
-           if ( tagName === 'dict'){
-            throw new error('You tagged a sequence as a dict')
+          if ( tagName === 'dict'){
+            return {
+              type: 'dict_literal',
+              entries: [] 
+            }
+          } else {
+            return {
+              type: tagName + '_literal',
+              items: []
+            }
+          }        
+        }
+            },
+    {"name": "dictionary_literal", "symbols": ["optional_tag", {"literal":"{"}, "_", "key_value_pair_list", "_", {"literal":"}"}], "postprocess": 
+        (data) => {
+          const tagName = data[0] || 'dict';
+          if ( tagName !== 'dict'){
+            throw new Error("Tagged a dict as a " + tagName);
           }
           return {
-            type: tagName + '_literal',
-            items: []
+            type: 'dict_literal',
+            entries: data[3]
           }
         }
             },
+    {"name": "key_value_pair_list", "symbols": ["key_value_pair"], "postprocess": 
+        (data) => {
+          return [data[0]]
+        }
+          },
+    {"name": "key_value_pair_list", "symbols": ["key_value_pair", "__", "key_value_pair_list"], "postprocess": 
+        (data) => {
+          return [data[0], ...data[2]]
+        }
+          },
+    {"name": "key_value_pair", "symbols": ["expression", "_", {"literal":":"}, "_", "expression"], "postprocess":  
+        (data) => {
+          return [data[0], data[4]]
+        }
+          },
     {"name": "optional_tag", "symbols": [], "postprocess": () => null},
     {"name": "optional_tag", "symbols": ["tag"], "postprocess": id},
     {"name": "tag", "symbols": [(lexer.has("less_than") ? {type: "less_than"} : less_than), "tag_name", (lexer.has("greater_than") ? {type: "greater_than"} : greater_than)], "postprocess":  
-        (data) => data[1] 
+        (data) => data[1].value
             },
     {"name": "tag_name", "symbols": [{"literal":"array"}], "postprocess": id},
     {"name": "tag_name", "symbols": [{"literal":"dict"}], "postprocess": id},

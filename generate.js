@@ -1,81 +1,7 @@
 const fs = require('fs').promises;
+const { readFileSync } = require('fs');
 const path = require('path');
-
-const runtime = `
-  /*
-    runtime functions
-  */
-  function print(...args){
-    console.log(...args);
-  }
-
-  function add(...args){
-    return args.reduce((sum, num) => sum + num, 0);
-  }
-
-  function sub(x, y){
-    return x - y;
-  }
-
-  function mul(...args){
-    return args.reduce((sum, num) => sum * num, 1);
-  }
-
-  function div(x, y){
-    return x / y;
-  }
-
-  function mod(x, y){
-    return x % y;
-  }
-
-  function abs(n){
-    return Math.abs(n);
-  }
-
-  function pow(n, m){
-    return Math.pow(n, m);
-  }
-
-  function sqrt(x){
-    return Math.sqrt(x);
-  }
-
-  function gt(x, y){
-    return x > y;
-  }
-
-  function eq(one, other){
-    return one === other;
-  }
-
-  function $if(cond, consequent, alternate){
-    if ( cond){
-      return consequent();
-    } else {
-      return alternate();
-    }
-  }
-
-  function map(arr, fun){
-    return arr.map(fun);
-  }
-
-  function filter(arr, fun){
-    return arr.filter(fun);
-  }
-
-  function reduce(arr, fun, initValue){
-    return arr.reduce(fun, initValue);
-  }
-
-  function each(arr, fun){
-    return arr.forEach(fun);
-  }
-
-
-
-`;
+const RUNTIME = readFileSync(path.join(__dirname, 'runtime.js')).toString();
 
 async function main() {
   const filename = process.argv[2];
@@ -96,7 +22,7 @@ async function main() {
 function generate(node) {
   switch (node.type) {
     case 'program':
-      return node.body.map(generate).join(';\n') + ';\n\n' + runtime;
+      return node.body.map(generate).join(';\n') + ';\n\n' + RUNTIME;
     case 'assignment':
       const varName = node.var_name.value;
       const value = generate(node.value);
@@ -127,6 +53,16 @@ function generate(node) {
     case 'set_literal':
       const setItems = node.items.map(generate).join(', ');
       return `new Set([${setItems}])`;
+    case 'dict_literal':
+      const entries = node.entries
+        .map((entry) => {
+          const [key, value] = entry;
+          const keyExpr = generate(key);
+          const valueExpr = generate(value);
+          return `[${keyExpr}, ${valueExpr}]`;
+        })
+        .join(', ');
+      return `new Map([${entries}])`;
     default:
       throw new Error(`unknown node type: ${node.type}`);
       break;
